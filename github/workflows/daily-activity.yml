@@ -1,0 +1,76 @@
+name: Daily activity
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-activity
+  cancel-in-progress: false
+
+jobs:
+  activity:
+    runs-on: ubuntu-latest
+    env:
+      MAIN_PAT: ${{ secrets.MAIN_PAT }}
+      BOT_PAT: ${{ secrets.BOT_PAT }}
+      MAIN_USER: ${{ vars.MAIN_USER }}
+      MAIN_EMAIL: ${{ vars.MAIN_EMAIL }}
+      BOT_USER: ${{ vars.BOT_USER }}
+      BOT_EMAIL: ${{ vars.BOT_EMAIL }}
+      REPO: ${{ github.repository }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.MAIN_PAT }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Pick roles (alternate author/reviewer daily)
+        run: |
+          if [ $(( 10#$(date -u +%j) % 2 )) -eq 0 ]; then
+            echo "AUTHOR_TOKEN=$MAIN_PAT"   >> "$GITHUB_ENV"
+            echo "REVIEWER_TOKEN=$BOT_PAT"  >> "$GITHUB_ENV"
+            echo "AUTHOR_NAME=$MAIN_USER"   >> "$GITHUB_ENV"
+            echo "AUTHOR_EMAIL=$MAIN_EMAIL" >> "$GITHUB_ENV"
+          else
+            echo "AUTHOR_TOKEN=$BOT_PAT"    >> "$GITHUB_ENV"
+            echo "REVIEWER_TOKEN=$MAIN_PAT" >> "$GITHUB_ENV"
+            echo "AUTHOR_NAME=$BOT_USER"    >> "$GITHUB_ENV"
+            echo "AUTHOR_EMAIL=$BOT_EMAIL"  >> "$GITHUB_ENV"
+          fi
+
+      - name: Update file
+        run: python scripts/daily_update.py
+
+      - name: Commit, PR, review, merge
+        run: |
+          set -euo pipefail
+          if git diff --quiet && [ -z "$(git ls-files --others --exclude-standard)" ]; then
+            echo "No changes."; exit 0
+          fi
+
+          BRANCH="daily/$(date -u +%Y-%m-%d)-$GITHUB_RUN_ID"
+          git config user.name  "$AUTHOR_NAME"
+          git config user.email "$AUTHOR_EMAIL"
+          git checkout -b "$BRANCH"
+          git add -A
+          git commit -m "chore: daily log update $(date -u +%Y-%m-%d)"
+          git push "https://x-access-token:${AUTHOR_TOKEN}@github.com/${REPO}.git" "$BRANCH"
+
+          PR_URL=$(GH_TOKEN="$AUTHOR_TOKEN" gh pr create \
+            --repo "$REPO" --base main --head "$BRANCH" \
+            --title "chore: daily log $(date -u +%Y-%m-%d)" \
+            --body "Automated daily log update.")
+
+          GH_TOKEN="$REVIEWER_TOKEN" gh pr review "$PR_URL" \
+            --approve --body "Reviewed: change is limited to DAILY_LOG.md. LGTM."
+
+          GH_TOKEN="$REVIEWER_TOKEN" gh pr merge "$PR_URL" --squash --delete-branch
