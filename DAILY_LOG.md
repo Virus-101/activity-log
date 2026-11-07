@@ -31,3 +31,4 @@
 - **2026-11-04** - Talk is cheap. Show me the code. - Linus Torvalds
 - **2026-11-05** - First, solve the problem. Then, write the code. - John Johnson
 - **2026-11-06** - Debugging is twice as hard as writing the code. - Kernighan
+- **2026-11-07** - Code is like humor. When you have to explain it, it's bad. - Cory House
