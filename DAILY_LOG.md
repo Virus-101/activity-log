@@ -33,3 +33,4 @@
 - **2026-11-06** - Debugging is twice as hard as writing the code. - Kernighan
 - **2026-11-07** - Code is like humor. When you have to explain it, it's bad. - Cory House
 - **2026-11-08** - Premature optimization is the root of all evil. - Knuth
+- **2026-11-09** - Make it work, make it right, make it fast. - Kent Beck
