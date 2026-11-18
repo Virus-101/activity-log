@@ -41,3 +41,4 @@
 - **2026-11-14** - Debugging is twice as hard as writing the code. - Kernighan
 - **2026-11-15** - Code is like humor. When you have to explain it, it's bad. - Cory House
 - **2026-11-16** - Premature optimization is the root of all evil. - Knuth
+- **2026-11-18** - Simplicity is prerequisite for reliability. - Dijkstra
