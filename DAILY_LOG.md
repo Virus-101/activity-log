@@ -42,3 +42,4 @@
 - **2026-11-15** - Code is like humor. When you have to explain it, it's bad. - Cory House
 - **2026-11-16** - Premature optimization is the root of all evil. - Knuth
 - **2026-11-18** - Simplicity is prerequisite for reliability. - Dijkstra
+- **2026-11-19** - Programs must be written for people to read. - Abelson & Sussman
