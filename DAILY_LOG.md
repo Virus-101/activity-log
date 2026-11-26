@@ -49,3 +49,4 @@
 - **2026-11-23** - Code is like humor. When you have to explain it, it's bad. - Cory House
 - **2026-11-24** - Premature optimization is the root of all evil. - Knuth
 - **2026-11-25** - Make it work, make it right, make it fast. - Kent Beck
+- **2026-11-26** - Simplicity is prerequisite for reliability. - Dijkstra
