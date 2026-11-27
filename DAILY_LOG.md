@@ -50,3 +50,4 @@
 - **2026-11-24** - Premature optimization is the root of all evil. - Knuth
 - **2026-11-25** - Make it work, make it right, make it fast. - Kent Beck
 - **2026-11-26** - Simplicity is prerequisite for reliability. - Dijkstra
+- **2026-11-27** - Programs must be written for people to read. - Abelson & Sussman
