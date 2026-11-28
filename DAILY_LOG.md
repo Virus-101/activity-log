@@ -51,3 +51,4 @@
 - **2026-11-25** - Make it work, make it right, make it fast. - Kent Beck
 - **2026-11-26** - Simplicity is prerequisite for reliability. - Dijkstra
 - **2026-11-27** - Programs must be written for people to read. - Abelson & Sussman
+- **2026-11-28** - Talk is cheap. Show me the code. - Linus Torvalds
